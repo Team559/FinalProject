@@ -48,7 +48,7 @@ namespace project.Controllers{
             return Ok(allStaff);
         }
 
-        // Get list of all staff with that name
+        // Get list of all serailized instruments
         [HttpGet]
         [Route("staff/name/{name}/")]
         public IActionResult getStaffByName(string name)
@@ -57,7 +57,7 @@ namespace project.Controllers{
             return Ok(allStaff);
         }
 
-        // Get list of all staff in that department
+        // Get list of all serailized instruments
         [HttpGet]
         [Route("staff/dept/{name}/")]
         public IActionResult getDeptByName(string name)
@@ -65,9 +65,6 @@ namespace project.Controllers{
             DataSet allStaff = executeSQL("SELECT * FROM staff_info WHERE st_dept LIKE " + (char)39 + "%" + name + "%" + (char)39);
             return Ok(allStaff);
         }
-
-
-       
+          
     }
-
 }

@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace project.Controllers{
 
- public class InstrumentController : ControllerBase{
+ public class InstrumentController : ControllerBase {
 
         // Connects to database and execute an SQL statement for retrieving the data for Countries
         [ApiExplorerSettings(IgnoreApi = true)]
@@ -35,6 +35,14 @@ namespace project.Controllers{
         [Route("instruments/")]
         public IActionResult getInstruments()
         {
+
+            string userHeader  = Request.Headers["user"];
+
+            if (userHeader == null || userHeader.Length == 0 || (userHeader.Length != 0 && !String.Equals(userHeader, "admin")))
+            {
+                return Unauthorized();
+            }
+
             DataSet allInstruments = executeSQL("SELECT * FROM instruments_info");
             return Ok(allInstruments);
         }
@@ -44,6 +52,13 @@ namespace project.Controllers{
         [Route("instruments/{type}/")]
         public IActionResult getSerializedInstruments(string type)
         {
+            string userHeader  = Request.Headers["user"];
+
+            if (userHeader == null || userHeader.Length == 0 || (userHeader.Length != 0 && !String.Equals(userHeader, "admin")))
+            {
+                return Unauthorized();
+            }
+
             int status = type == "sterilized" ? 1 : 0;
             DataSet allInstruments = executeSQL("SELECT * FROM instruments_info WHERE sterlization_status = " + status);
             return Ok(allInstruments);
@@ -52,22 +67,30 @@ namespace project.Controllers{
         // Update an existing record from the database by instrument id
         [HttpPut]
         [Route("instruments/{id}")]
-        public IActionResult updateInstrument(int id )
+        public IActionResult updateInstrument(string id )
         {
             try {
-                string sqlQuery = "UPDATE instruments_info SET sterlization_status = 0 WHERE i_id =  " + (char)39 + id + (char)39;
+
+                string userHeader  = Request.Headers["user"];
+
+                if (userHeader == null || userHeader.Length == 0 || (userHeader.Length != 0 && !String.Equals(userHeader, "admin")))
+                {
+                    return Unauthorized();
+                }
+
+                string sqlQuery = "UPDATE instruments_info SET sterlization_status = 0 WHERE i_rfid =  " + (char)39 + id + (char)39;
                 executeSQL(sqlQuery);
 
-                DataSet updatedInstruments = executeSQL("SELECT * FROM instruments_info WHERE i_id = " + (char)39 + id + (char)39);
+                DataSet updatedInstruments = executeSQL("SELECT * FROM instruments_info WHERE i_rfid =  " + (char)39 + id + (char)39);
 
                 int records = updatedInstruments.Tables[0].Rows.Count;
                 if (records == 0) {
                     HttpContext.Response.StatusCode = 404;
-                    return NotFound("No Instrument found with id  " + id);
+                    return NotFound("No Instrument found with RFID  " + id);
                 }
 
                 HttpContext.Response.StatusCode = 200;
-                var status = "Instrument with Id " + id + " Updated successfully !!";
+                var status = "Instrument with RFID " + id + " Updated successfully !!";
                 
                 return Ok(status);
 
@@ -84,20 +107,29 @@ namespace project.Controllers{
         // Delete an existing record from the database by instrument id
         [HttpDelete]
         [Route("instruments/{id}")]
-        public IActionResult deleteInstrument(int id )
+        public IActionResult deleteInstrument(string id )
         {
             try {
-                    DataSet deletedInstruments = executeSQL("SELECT * FROM instruments_info WHERE i_id = " + (char)39 + id + (char)39);
+
+                    string userHeader  = Request.Headers["user"];
+
+                    if (userHeader == null || userHeader.Length == 0 || (userHeader.Length != 0 && !String.Equals(userHeader, "admin")))
+                    {
+                        return Unauthorized();
+                    }
+
+                    DataSet deletedInstruments = executeSQL("SELECT * FROM instruments_info WHERE i_rfid = " +  (char)39 + id + (char)39);
 
                     int records = deletedInstruments.Tables[0].Rows.Count;
                     if (records == 0) {
                         HttpContext.Response.StatusCode = 404;
-                        return NotFound("No Instrument found with id  " + id);
+                        return NotFound("No Instrument found with RFID  " + id);
                     }
-
-                    executeSQL("DELETE FROM instruments_info WHERE i_id = " + (char)39 + id + (char)39);
+                    executeSQL("SET FOREIGN_KEY_CHECKS=OFF;");
+                    executeSQL("DELETE FROM instruments_info WHERE i_rfid = "  + (char)39 + id + (char)39);
+                    executeSQL("SET FOREIGN_KEY_CHECKS=ON;");
                     HttpContext.Response.StatusCode = 200;
-                    var status = "Instrument with Id " + id + " Deleted successfully !!";
+                    var status = "Instrument with RFID " + id + " Deleted successfully !!";
                     
                     return Ok(status);
 
