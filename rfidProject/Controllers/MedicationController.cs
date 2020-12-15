@@ -78,7 +78,7 @@ namespace project.Controllers{
 
                 //TODO: check the accessed field.
                 //TODO: use the number in the accessed field and GET the name of the nurse.
-                return Ok(x); //TODO return the name of the nurse.
+                return Ok("x"); //TODO return the name of the nurse.
 
             } catch (Exception e) {
                 HttpContext.Response.StatusCode = 400;
@@ -96,7 +96,7 @@ namespace project.Controllers{
                 DataSet med = executeSQL("SELECT * FROM medicine_info WHERE given_to = " + (char)39 + patient_id + (char)39);
 
                 //TODO return the list of medicine names.
-                return Ok(x); //x is list of medicine names.
+                return Ok("x"); //x is list of medicine names.
 
 
             } catch (Exception e) {

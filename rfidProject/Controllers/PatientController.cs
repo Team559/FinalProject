@@ -36,6 +36,14 @@ namespace project.Controllers{
         [Route("patients/")]
         public IActionResult getAllPatient()
         {
+
+            string userHeader  = Request.Headers["user"];
+
+            if (userHeader == null || userHeader.Length == 0 || (userHeader.Length != 0 && !String.Equals(userHeader, "admin")))
+            {
+                return Unauthorized();
+            }
+
             DataSet allPatient = executeSQL("SELECT * FROM patient_info");
             return Ok(allPatient);
         }
@@ -43,21 +51,30 @@ namespace project.Controllers{
         // Delete an existing record from the database by patient id
         [HttpDelete]
         [Route("patients/{id}")]
-        public IActionResult deletePatient(int id )
+        public IActionResult deletePatient(string id )
         {
             try {
-                    DataSet deletedInstruments = executeSQL("SELECT * FROM patient_info WHERE p_id = " + (char)39 + id + (char)39);
+
+
+                    string userHeader  = Request.Headers["user"];
+
+                    if (userHeader == null || userHeader.Length == 0 || (userHeader.Length != 0 && !String.Equals(userHeader, "admin")))
+                    {
+                        return Unauthorized();
+                    }
+
+                    DataSet deletedInstruments = executeSQL("SELECT * FROM patient_info WHERE p_rfid = " + (char)39 + id + (char)39);
 
                     int records = deletedInstruments.Tables[0].Rows.Count;
                     if (records == 0) {
                         HttpContext.Response.StatusCode = 404;
-                        return NotFound("No Patient found with id  " + id);
+                        return NotFound("No Patient found with RFID  " + id);
                     }
                     executeSQL("SET FOREIGN_KEY_CHECKS=OFF;");
-                    executeSQL("DELETE FROM patient_info WHERE p_id = " + (char)39 + id + (char)39);
+                    executeSQL("DELETE FROM patient_info WHERE p_rfid = " + (char)39 + id + (char)39);
                     executeSQL("SET FOREIGN_KEY_CHECKS=ON;");
                     HttpContext.Response.StatusCode = 200;
-                    var status = "Patient with Id " + id + " Deleted successfully !!";
+                    var status = "Patient with RFID " + id + " Deleted successfully !!";
                     
                     return Ok(status);
 
@@ -71,12 +88,21 @@ namespace project.Controllers{
             
         } 
 
-        // Add record from the database by patient id
+        // Delete an existing record from the database by patient id
         [HttpPost]
         [Route("patients/")]
         public IActionResult addPatient([FromBody] Patient patient )
         {
             try {
+
+
+                    string userHeader  = Request.Headers["user"];
+
+                    if (userHeader == null || userHeader.Length == 0 || (userHeader.Length != 0 && !String.Equals(userHeader, "admin")))
+                    {
+                        return Unauthorized();
+                    }
+
 
                     // executeSQL("SET FOREIGN_KEY_CHECKS=OFF;"); //disabling foreign key
                     Random random = new Random();

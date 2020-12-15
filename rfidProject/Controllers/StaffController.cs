@@ -48,7 +48,7 @@ namespace project.Controllers{
             return Ok(allStaff);
         }
 
-        // Get list of all staff with that name
+        // Get list of all serailized instruments
         [HttpGet]
         [Route("staff/name/{name}/")]
         public IActionResult getStaffByName(string name)
@@ -57,7 +57,7 @@ namespace project.Controllers{
             return Ok(allStaff);
         }
 
-        // Get list of all staff in that department
+        // Get list of all serailized instruments
         [HttpGet]
         [Route("staff/dept/{name}/")]
         public IActionResult getDeptByName(string name)
@@ -66,13 +66,11 @@ namespace project.Controllers{
             return Ok(allStaff);
         }
 
-
-        public static String getName(int id) {
+        public String getName(int id) {
             DataSet staffmember = executeSQL("SELECT * FROM staff_info WHERE st_id = " + (char)39 + "%" + id + "%" + (char)39);
             
             return "name"; //TODO return staffmember.name ?
         }
-       
+          
     }
-
 }

@@ -59,11 +59,12 @@ namespace project.Controllers{
         // Return the doctor who performed the surgery
         [HttpGet]
         [Route("surgeryRooms/staff/{surgery_id}")]
-        public static IActionResult getSurgeryDocter(int surgery_id) {
+        public IActionResult getSurgeryDocter(int surgery_id) {
             try {
                 DataSet surgery = executeSQL("SELECT * FROM surgery_info WHERE s_id = " + (char)39 + surgery_id + (char)39);
-                StaffController.getName(55555);
-                //TODO get the doctor who performed the surgery
+                StaffController SC = new StaffController();
+                String name = SC.getName(555);         //TODO get the doctor who performed the surgery
+        
                 
 
                 return Ok(); //incorrect
@@ -125,8 +126,8 @@ namespace project.Controllers{
                     int id = random.Next(0, 1000);
                     string sqlQuery = "INSERT INTO medicine_info VALUES ( " + 
                                                                             (char)39 + id + (char)39 + "," +
-                                                                            (char)39 + room.name + (char)39 + "," +
-                                                                            (char)39 + room.rfid + (char)39 + 
+                                                                            (char)39 + "NULL" + (char)39 + "," +
+                                                                            (char)39 + "NULL"+ (char)39 + 
                                                                             ");";
                     executeSQL(sqlQuery);
                     // executeSQL("SET FOREIGN_KEY_CHECKS=ON;"); 

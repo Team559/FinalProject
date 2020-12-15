@@ -24,7 +24,7 @@ namespace project.Controllers{
         {
 
             string connStr = "server=localhost; port=3306; user=root; password=LSWPMGy825mv1u; database=Medical_Surgeries";
-            MySqlConnection conn = new MySqlConnection(connStr);;
+            MySqlConnection conn = new MySqlConnection(connStr);
             MySqlDataAdapter sqlAdapter = new MySqlDataAdapter(sqlStatement,conn);
             DataSet myResultSet = new DataSet();
             sqlAdapter.Fill(myResultSet,"staff_info");
