@@ -67,6 +67,11 @@ namespace project.Controllers{
         }
 
 
+        public static String getName(int id) {
+            DataSet staffmember = executeSQL("SELECT * FROM staff_info WHERE st_id = " + (char)39 + "%" + id + "%" + (char)39);
+            
+            return "name"; //TODO return staffmember.name ?
+        }
        
     }
 

@@ -1,3 +1,16 @@
+using System;
+using Microsoft.AspNetCore.Mvc;
+using System.Data;
+using System.Net;
+using System.Net.Http;
+using MySql.Data.MySqlClient;
+using System.Text;
+using System.IO;
+using Microsoft.AspNetCore.Cors.Infrastructure;
+
+using rfidProject.Models;
+using project.Models;
+
 namespace project.Controllers{
 
  public class SurgeryController : ControllerBase{
@@ -32,6 +45,7 @@ namespace project.Controllers{
                 DataSet surgeries = executeSQL("SELECT * FROM surgery_info WHERE s_progress = " + (char)39 + progress + (char)39);
 
                 //TODO return the dataset of surgeries.
+                return Ok();
 
             } catch (Exception e) {
                 HttpContext.Response.StatusCode = 400;
@@ -45,12 +59,14 @@ namespace project.Controllers{
         // Return the doctor who performed the surgery
         [HttpGet]
         [Route("surgeryRooms/staff/{surgery_id}")]
-        public IActionResult getSurgeryDocter(int surgery_id) {
+        public static IActionResult getSurgeryDocter(int surgery_id) {
             try {
                 DataSet surgery = executeSQL("SELECT * FROM surgery_info WHERE s_id = " + (char)39 + surgery_id + (char)39);
-
+                StaffController.getName(55555);
                 //TODO get the doctor who performed the surgery
-                return Ok(surgery.doctor) //incorrect
+                
+
+                return Ok(); //incorrect
 
 
             } catch (Exception e) {
@@ -128,7 +144,8 @@ namespace project.Controllers{
             }
             
         } 
-
+ }
+}
 
 
 

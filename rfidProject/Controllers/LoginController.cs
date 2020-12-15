@@ -11,6 +11,8 @@ using System.IO;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 
+using project.Models;
+
 namespace project.Controllers{
 
  public class LoginController : ControllerBase{

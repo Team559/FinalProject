@@ -1,4 +1,17 @@
 
+using System;
+using Microsoft.AspNetCore.Mvc;
+using System.Data;
+using System.Net;
+using System.Net.Http;
+using MySql.Data.MySqlClient;
+using System.Text;
+using System.IO;
+using Microsoft.AspNetCore.Cors.Infrastructure;
+
+using rfidProject.Models;
+using project.Models;
+
 namespace project.Controllers{
 
  public class MedicationController : ControllerBase{
@@ -105,7 +118,7 @@ namespace project.Controllers{
             try {
 
                     // executeSQL("SET FOREIGN_KEY_CHECKS=OFF;"); //disabling foreign key
-                    string sqlQuery = "INSERT INTO medicine_info VALUES ( " +  (char)39 + med.rfid + (char)39 + ","
+                    string sqlQuery = "INSERT INTO medicine_info VALUES ( " +  (char)39 + med.rfid + (char)39 + "," +
                                                                             (char)39 + med.name + (char)39 + "," +
                                                                             (char)39 + med.accessed + (char)39 + "," +
                                                                             (char)39 + med.given + (char)39 + "," +
@@ -127,7 +140,9 @@ namespace project.Controllers{
                     title: e.Message);
             }
             
-        } 
+        }
+ } 
+}
 
 
 
