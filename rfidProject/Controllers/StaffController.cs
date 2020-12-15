@@ -58,7 +58,7 @@ namespace project.Controllers {
             return Ok(allStaff);
         }
 
-        // Get list of all serailized instruments
+
         [HttpGet]
         [Route("staff/dept/{name}/")]
         public IActionResult getDeptByName(string name)

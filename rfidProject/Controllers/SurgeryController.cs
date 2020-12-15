@@ -27,29 +27,25 @@ using project.Models;
              MySqlConnection conn = new MySqlConnection(connStr);;
              MySqlDataAdapter sqlAdapter = new MySqlDataAdapter(sqlStatement,conn);
              DataSet myResultSet = new DataSet();
-             sqlAdapter.Fill(myResultSet,"surgeryRoom_info");
+             sqlAdapter.Fill(myResultSet,"surgery_info");
              return myResultSet;
          }
 
-         // Get list of all surgery rooms
+         // Get list of all surgeries
          [HttpGet]
-         [Route("surgeryRooms/")]
-         public IActionResult getAllSurgRooms()
+         [Route("surgeries/")]
+         public IActionResult getAllSurgies()
          {
-             DataSet allSurgeryRooms = executeSQL("SELECT * FROM surgeryRoom_info");
+             DataSet allSurgeryRooms = executeSQL("SELECT * FROM surgery_info");
              return Ok(allSurgeryRooms);
          }
 
-         //get a list of scheduled/complete/cancelled surgeries
          [HttpGet]
-         [Route("surgeryRooms/progress/{progress}")]
-         public IActionResult getProgress(String progress) {
+         [Route("surgeries/patient/{name}")]
+         public IActionResult getSurgeryByPatient(string name) {
              try {
-                 DataSet surgeries = executeSQL("SELECT * FROM surgery_info WHERE s_progress = " + (char)39 + progress + (char)39);
-
-                 //TODO return the dataset of surgeries.
-                 
-                 return Ok("list of surgeries here");
+                 DataSet med = executeSQL("SELECT * FROM surgery_info WHERE patient_name LIKE " + (char)39 + "%"+ name +"%"+ (char)39);
+                 return Ok(med);
 
              } catch (Exception e) {
                  HttpContext.Response.StatusCode = 400;
@@ -60,17 +56,12 @@ using project.Models;
              }
          }
 
-         // Return the doctor who performed the surgery
          [HttpGet]
-         [Route("surgeryRooms/staff/{surgery_id}")]
-         public IActionResult getSurgeryDocter(int surgery_id) {
+         [Route("surgeries/doctor/{name}")]
+         public IActionResult getSurgeryByDoctor(string name) {
              try {
-                 DataSet surgery = executeSQL("SELECT * FROM surgery_info WHERE s_id = " + (char)39 + surgery_id + (char)39);
-
-                 //TODO get the doctor who performed the surgery
-
-                 return Ok("firstName lastName"); //incorrect
-
+                 DataSet med = executeSQL("SELECT * FROM surgery_info WHERE doctor_name LIKE " + (char)39 + "%"+ name +"%"+ (char)39);
+                 return Ok(med);
 
              } catch (Exception e) {
                  HttpContext.Response.StatusCode = 400;
@@ -81,27 +72,24 @@ using project.Models;
              }
          }
 
-
-
-
-         // Delete an existing record from the database by room id
+         // Delete an existing record from the database by surgery id
          [HttpDelete]
-         [Route("surgeryRooms/{id}")]
-         public IActionResult deleteSurgeryRoom(int id )
+         [Route("surgeries/{id}")]
+         public IActionResult deleteMedication(int id )
          {
              try {
-                     DataSet deletedRoom = executeSQL("SELECT * FROM surgeryRoom_info WHERE room_id = " + (char)39 + id + (char)39);
+                     DataSet deletedRoom = executeSQL("SELECT * FROM surgery_info WHERE s_id = " + (char)39 + id + (char)39);
 
                      int records = deletedRoom.Tables[0].Rows.Count;
                      if (records == 0) {
                          HttpContext.Response.StatusCode = 404;
-                         return NotFound("No room found with id  " + id);
+                         return NotFound("No Surgery found with id  " + id);
                      }
                      executeSQL("SET FOREIGN_KEY_CHECKS=OFF;");
-                     executeSQL("DELETE FROM surgeryRoom_info WHERE room_id = " + (char)39 + id + (char)39);
+                     executeSQL("DELETE FROM surgery_info WHERE s_id = " + (char)39 + id + (char)39);
                      executeSQL("SET FOREIGN_KEY_CHECKS=ON;");
                      HttpContext.Response.StatusCode = 200;
-                     var status = "Surgery room with Id " + id + " Deleted successfully !!";
+                     var status = "Surgery with Id " + id + " Deleted successfully !!";
                     
                      return Ok(status);
 
@@ -112,28 +100,31 @@ using project.Models;
                      detail: e.StackTrace,
                      title: e.Message);
              }
-         } 
+         }
 
-
-
-         // Add record from the database by surgeryRooms id
-         [HttpPost]
-         [Route("surgeryRooms/")]
-         public IActionResult addRoom([FromBody] SurgeryRoom room )
+         // Add record from the database by medication id
+         // use NULL for accessed/given/used when the med has not been used.
+         [HttpPut]
+         [Route("surgeries/{id}")]
+         public IActionResult upadteSurgery(string id )
          {
              try {
+                
+                string sqlQuery = "UPDATE surgery_info SET s_progress = 'Completed' WHERE s_id =  " + (char)39 + id + (char)39;
+                executeSQL(sqlQuery);
 
-                     // executeSQL("SET FOREIGN_KEY_CHECKS=OFF;"); //disabling foreign key
-                     Random random = new Random();
-                     int id = random.Next(0, 1000);
-                     string sqlQuery = "INSERT INTO medicine_info VALUES ( " + 
-                                                                             (char)39 + id + (char)39 + ");";
-                     executeSQL(sqlQuery);
-                     // executeSQL("SET FOREIGN_KEY_CHECKS=ON;"); 
-                     HttpContext.Response.StatusCode = 200;
-                     var status = "Medication added successfully !!";
-                    
-                     return Ok(status);
+                DataSet updatedInstruments = executeSQL("SELECT * FROM surgery_info WHERE s_id =  " + (char)39 + id + (char)39);
+
+                int records = updatedInstruments.Tables[0].Rows.Count;
+                if (records == 0) {
+                    HttpContext.Response.StatusCode = 404;
+                    return NotFound("No Surgery found with id   " + id);
+                }
+
+                HttpContext.Response.StatusCode = 200;
+                var status = "Surgery with id " + id + " Updated successfully !!";
+                
+                return Ok(status);
 
              } catch (Exception e) {
                  HttpContext.Response.StatusCode = 400;
@@ -141,10 +132,9 @@ using project.Models;
                  return Problem(
                      detail: e.StackTrace,
                      title: e.Message);
-             }
-            
+            }
          } 
-  }
+    }
  }
 
 

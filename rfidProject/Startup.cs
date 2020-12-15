@@ -35,6 +35,11 @@ namespace rfidProject
 
             services.TryAddSingleton<IStaffSoapService, StaffSoapService>();
 
+            services.Configure<IISServerOptions>(options =>
+            {
+                options.AllowSynchronousIO = true;
+            });
+
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowSpecificOrigin",

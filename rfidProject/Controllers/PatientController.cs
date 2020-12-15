@@ -95,11 +95,10 @@ namespace project.Controllers{
         public IActionResult addPatient([FromBody] Patient patient )
         {
             try {
-
-
+                    
                     string userHeader  = Request.Headers["user"];
 
-                    if (userHeader == null || userHeader.Length == 0 || (userHeader.Length != 0 && !String.Equals(userHeader, "admin")))
+                    if (userHeader == null || userHeader.Length == 0 || (userHeader.Length != 0 && !String.Equals(userHeader, "admin"))) 
                     {
                         return Unauthorized();
                     }
@@ -117,7 +116,6 @@ namespace project.Controllers{
                     // executeSQL("SET FOREIGN_KEY_CHECKS=ON;"); 
                     HttpContext.Response.StatusCode = 200;
                     var status = "Patient added successfully !!";
-                    
                     return Ok(status);
 
             } catch (Exception e) {
