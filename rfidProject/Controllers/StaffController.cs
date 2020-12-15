@@ -9,8 +9,9 @@ using MySql.Data.MySqlClient;
 using System.Text;
 using System.IO;
 using Microsoft.AspNetCore.Cors.Infrastructure;
+using Models;
 
-namespace project.Controllers{
+namespace project.Controllers {
 
  public class StaffController : ControllerBase{
 

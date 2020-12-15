@@ -3,7 +3,7 @@
 
 using System;
 
-namespace project {
+namespace Models {
 
     public class Instrument {
 

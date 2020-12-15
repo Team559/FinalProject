@@ -1,8 +1,9 @@
 
 
+
 using System;
 
-namespace project.Models {
+namespace Models {
 
     public class Instrument {
 
@@ -13,8 +14,3 @@ namespace project.Models {
         
     }
 }
-
-
-//dev-yp9t-nqr.us.auth0.com
-
-// madico-rfid.us.auth0.com

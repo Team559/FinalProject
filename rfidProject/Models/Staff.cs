@@ -2,7 +2,7 @@
 
 using System;
 
-namespace project.Models {
+namespace Models {
 
     public class Staff {
 
