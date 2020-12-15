@@ -48,7 +48,7 @@ namespace project.Controllers{
             return Ok(allStaff);
         }
 
-        // Get list of all ....
+        // Get list of all staff with that name
         [HttpGet]
         [Route("staff/name/{name}/")]
         public IActionResult getStaffByName(string name)
@@ -57,7 +57,7 @@ namespace project.Controllers{
             return Ok(allStaff);
         }
 
-        // Get list of all ....
+        // Get list of all staff in that department
         [HttpGet]
         [Route("staff/dept/{name}/")]
         public IActionResult getDeptByName(string name)

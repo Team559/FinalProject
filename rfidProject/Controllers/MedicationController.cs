@@ -32,7 +32,7 @@ namespace project.Controllers{
         public IActionResult deleteMedication(int id )
         {
             try {
-                    DataSet deletedRoom = executeSQL("SELECT * FROM medicine_info WHERE m_id = " + (char)39 + id + (char)39);
+                    DataSet deletedRoom = executeSQL("SELECT * FROM medicine_info WHERE m_rfid = " + (char)39 + id + (char)39);
 
                     int records = deletedRoom.Tables[0].Rows.Count;
                     if (records == 0) {
@@ -56,8 +56,48 @@ namespace project.Controllers{
             }
         } 
 
+        //get the nurse who accessed a medicine by the medicines id
+        [HttpGet]
+        [Route("medications/accessed/{rfid}")]
+        public IActionResult getAccessed(int rfid) {
+            try {
+                DataSet med = executeSQL("SELECT * FROM medicine_info WHERE m_rfid = " + (char)39 + rfid + (char)39);
+
+                //TODO: check the accessed field.
+                //TODO: use the number in the accessed field and GET the name of the nurse.
+                return Ok(x); //TODO return the name of the nurse.
+
+            } catch (Exception e) {
+                HttpContext.Response.StatusCode = 400;
+                
+                return Problem(
+                    detail: e.StackTrace,
+                    title: e.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("medications/given/{patient_id}")]
+        public IActionResult getMedsGiven(int patient_id) {
+            try {
+                DataSet med = executeSQL("SELECT * FROM medicine_info WHERE given_to = " + (char)39 + patient_id + (char)39);
+
+                //TODO return the list of medicine names.
+                return Ok(x); //x is list of medicine names.
+
+
+            } catch (Exception e) {
+                HttpContext.Response.StatusCode = 400;
+                
+                return Problem(
+                    detail: e.StackTrace,
+                    title: e.Message);
+            }
+        }
+
 
         // Add record from the database by medication id
+        // use NULL for accessed/given/used when the med has not been used.
         [HttpPost]
         [Route("medications/")]
         public IActionResult addMed([FromBody] Medication med )
@@ -65,12 +105,12 @@ namespace project.Controllers{
             try {
 
                     // executeSQL("SET FOREIGN_KEY_CHECKS=OFF;"); //disabling foreign key
-                    Random random = new Random();
-                    int id = random.Next(0, 1000);
-                    string sqlQuery = "INSERT INTO medicine_info VALUES ( " + 
-                                                                            (char)39 + id + (char)39 + "," +
+                    string sqlQuery = "INSERT INTO medicine_info VALUES ( " +  (char)39 + med.rfid + (char)39 + ","
                                                                             (char)39 + med.name + (char)39 + "," +
-                                                                            (char)39 + med.rfid + (char)39 + 
+                                                                            (char)39 + med.accessed + (char)39 + "," +
+                                                                            (char)39 + med.given + (char)39 + "," +
+                                                                            (char)39 + med.used + (char)39 + "," +
+                                                                            (char)39 + med.status + (char)39 + 
                                                                             ");";
                     executeSQL(sqlQuery);
                     // executeSQL("SET FOREIGN_KEY_CHECKS=ON;"); 

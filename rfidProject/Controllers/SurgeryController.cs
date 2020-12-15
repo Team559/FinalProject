@@ -24,6 +24,46 @@ namespace project.Controllers{
             return Ok(allSurgeryRooms);
         }
 
+        //get a list of scheduled/complete/cancelled surgeries
+        [HttpGet]
+        [Route("surgeryRooms/progress/{progress}")]
+        public IActionResult getProgress(String progress) {
+            try {
+                DataSet surgeries = executeSQL("SELECT * FROM surgery_info WHERE s_progress = " + (char)39 + progress + (char)39);
+
+                //TODO return the dataset of surgeries.
+
+            } catch (Exception e) {
+                HttpContext.Response.StatusCode = 400;
+                
+                return Problem(
+                    detail: e.StackTrace,
+                    title: e.Message);
+            }
+        }
+
+        // Return the doctor who performed the surgery
+        [HttpGet]
+        [Route("surgeryRooms/staff/{surgery_id}")]
+        public IActionResult getSurgeryDocter(int surgery_id) {
+            try {
+                DataSet surgery = executeSQL("SELECT * FROM surgery_info WHERE s_id = " + (char)39 + surgery_id + (char)39);
+
+                //TODO get the doctor who performed the surgery
+                return Ok(surgery.doctor) //incorrect
+
+
+            } catch (Exception e) {
+                HttpContext.Response.StatusCode = 400;
+                
+                return Problem(
+                    detail: e.StackTrace,
+                    title: e.Message);
+            }
+        }
+
+
+
 
         // Delete an existing record from the database by room id
         [HttpDelete]
