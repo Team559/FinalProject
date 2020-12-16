@@ -60,6 +60,7 @@ using project.Models;
 
          [HttpGet]
          [Route("surgeries/doctor/{name}")]
+         [Produces("application/json")]
          public IActionResult getSurgeryByDoctor(string name) {
              try {
                  DataSet med = executeSQL("SELECT * FROM surgery_info WHERE doctor_name LIKE " + (char)39 + "%"+ name +"%"+ (char)39);
@@ -74,8 +75,9 @@ using project.Models;
              }
          }
 
-        [HttpGet]
+         [HttpGet]
          [Route("surgeries/doctorXML/{name}")]
+         [Produces("application/xml")]
          public IActionResult getSurgeryByDoctorXML(string name) {
              try {
                  DataSet med = executeSQL("SELECT * FROM surgery_info WHERE doctor_name LIKE " + (char)39 + "%"+ name +"%"+ (char)39);
@@ -86,48 +88,47 @@ using project.Models;
                     return NotFound("No doctor found with name   " + name);
                 }
                 //else read the row:
-                 DataTable table = med.Tables[0];
-                 foreach (DataRow dr in table.Rows)
-                {
-                    String id = dr["st_id"].ToString();
-                    String dname = dr["st_name"].ToString();
-                    String dept = dr["st_dept"].ToString();
-                    String rfid = dr["st_rfid"].ToString();
-                    String spec = dr["st_specialization"].ToString();
+                //  DataTable table = med.Tables[0];
+                //  foreach (DataRow dr in table.Rows)
+                // {
+                //     String id =  dr["s_id"].ToString();
+                //     String sname = dr["s_name"].ToString();
+                //     String doctorname = dr["doctor_name"].ToString();
+                //     String patientname = dr["patient_name"].ToString();
+                //     String sroom = dr["s_room"].ToString();
 
-                    StringBuilder sb = new StringBuilder();
-                    XmlWriterSettings settings = new XmlWriterSettings();
-                    settings.Indent = true;
-                    settings.OmitXmlDeclaration = true;
-                    settings.NewLineOnAttributes = true;
-                    XmlWriter writer = XmlWriter.Create(sb, settings);
+                //     StringBuilder sb = new StringBuilder();
+                //     XmlWriterSettings settings = new XmlWriterSettings();
+                //     settings.Indent = true;
+                //     settings.OmitXmlDeclaration = true;
+                //     settings.NewLineOnAttributes = true;
+                //     XmlWriter writer = XmlWriter.Create(sb, settings);
 
-                    writer.WriteStartDocument();
-                    writer.WriteStartElement("Staff");
+                //     writer.WriteStartDocument();
+                //     writer.WriteStartElement("Staff");
 
-                    writer.WriteStartElement("Person");
-                    writer.WriteAttributeString("Name", dname);
-                    writer.WriteAttributeString("ID", id);
-                    writer.WriteAttributeString("Department", dept);
-                    writer.WriteAttributeString("rfid", rfid);
-                    writer.WriteAttributeString("Specialization", spec);
-                    writer.WriteEndElement();
+                //     writer.WriteStartElement("Person");
+                //     writer.WriteAttributeString("SurgeryName", sname);
+                //     writer.WriteAttributeString("ID", id);
+                //     writer.WriteAttributeString("DoctorName", doctorname);
+                //     writer.WriteAttributeString("PatientNAme", patientname);
+                //     writer.WriteAttributeString("SurgeryRoom", sroom);
+                //     writer.WriteEndElement();
 
-                    writer.WriteEndElement();
-                    writer.WriteEndDocument();
+                //     writer.WriteEndElement();
+                //     writer.WriteEndDocument();
 
-                    writer.Flush(); 
+                //     writer.Flush(); 
 
-                    XmlDocument xmlDocument = new XmlDocument();
-                    xmlDocument.LoadXml(sb.ToString());
-                    //return Ok(xmlDocument.ToString());
-
-                    return new ContentResult{
-                        ContentType = "application/xml",
-                        Content = xmlDocument.ToString(),
-                        StatusCode = 200
-                    };
-                }    
+                //     XmlDocument xmlDocument = new XmlDocument();
+                //     xmlDocument.LoadXml(sb.ToString());
+                    
+                //     return new ContentResult{
+                //         ContentType = "application/xml",
+                //         Content = xmlDocument.ToString(),
+                //         StatusCode = 200
+                //     };
+                // }    
                  
                  return Ok(med);
 

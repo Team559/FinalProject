@@ -15,6 +15,8 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using System.ServiceModel;
 
+using Microsoft.AspNetCore.Mvc.Formatters;
+
 namespace rfidProject
 {
     public class Startup
@@ -52,6 +54,18 @@ namespace rfidProject
             // services.Configure<IISServerOptions>(options =>
             // {
             //     options.AllowSynchronousIO = true;
+            // });
+
+            // services.AddMvc().AddXmlSerializerFormatters();
+            services.AddControllers(options =>
+            {
+                options.RespectBrowserAcceptHeader = true; // false by default
+            });
+            services.AddControllers().AddXmlSerializerFormatters();
+
+            // services.AddMvc(options =>
+            // {
+            //     options.OutputFormatters.Add(new XmlSerializerOutputFormatter());
             // });
 
             services.AddCors(options =>

@@ -254,3 +254,5 @@
 /home/as93/final_project559/rfidProject/bin/Debug/netcoreapp3.1/runtimes/win/lib/netstandard2.0/System.Security.Cryptography.ProtectedData.dll
 /home/as93/final_project559/rfidProject/bin/Debug/netcoreapp3.1/runtimes/unix/lib/netcoreapp2.1/System.Security.Principal.Windows.dll
 /home/as93/final_project559/rfidProject/bin/Debug/netcoreapp3.1/runtimes/win/lib/netcoreapp2.1/System.Security.Principal.Windows.dll
+/home/simkaur/FinalProject_C_Sharp/rfidProject/bin/Debug/netcoreapp3.1/Microsoft.DotNet.PlatformAbstractions.dll
+/home/simkaur/FinalProject_C_Sharp/rfidProject/bin/Debug/netcoreapp3.1/Microsoft.Extensions.DependencyModel.dll
