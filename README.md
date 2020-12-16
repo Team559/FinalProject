@@ -23,5 +23,6 @@ DATABASE:
 WROKING OF application:
 
 1. from POSTMAN: 
-   http://<domain>:4881/surgeries :: this will return the list of the surgies in JSON Format.
-   http://<domain>:4881/Service.asmx :: This is soap services, which will return the list of staff members in XML FORMAT.
+   http://hostname:4881/surgeries :: this will return the list of the surgies in JSON Format.
+   
+   http://hostname:4881/Service.asmx :: This is soap services, which will return the list of staff members in XML FORMAT.
