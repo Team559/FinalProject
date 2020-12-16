@@ -12,6 +12,7 @@ using Microsoft.Extensions.Hosting;
 using Models;
 using SoapCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using System.ServiceModel;
 
 namespace rfidProject
@@ -28,6 +29,19 @@ namespace rfidProject
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+
+            services.Configure<KestrelServerOptions>(options =>
+            {
+                options.AllowSynchronousIO = true;
+            });
+
+            // If using IIS:
+            services.Configure<IISServerOptions>(options =>
+            {
+                options.AllowSynchronousIO = true;
+            });
+
             services.AddControllersWithViews();
 
             services.AddControllers().AddNewtonsoftJson(options =>
@@ -35,10 +49,10 @@ namespace rfidProject
 
             services.TryAddSingleton<IStaffSoapService, StaffSoapService>();
 
-            services.Configure<IISServerOptions>(options =>
-            {
-                options.AllowSynchronousIO = true;
-            });
+            // services.Configure<IISServerOptions>(options =>
+            // {
+            //     options.AllowSynchronousIO = true;
+            // });
 
             services.AddCors(options =>
             {
