@@ -9,6 +9,8 @@ using System.Net.Http;
 using MySql.Data.MySqlClient;
 using System.Text;
 using System.IO;
+using System.Xml;
+using System.Text;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Models;
 
@@ -74,7 +76,7 @@ using project.Models;
 
         [HttpGet]
          [Route("surgeries/doctorXML/{name}")]
-         public IActionResult getSurgeryByDoctor(string name) {
+         public IActionResult getSurgeryByDoctorXML(string name) {
              try {
                  DataSet med = executeSQL("SELECT * FROM surgery_info WHERE doctor_name LIKE " + (char)39 + "%"+ name +"%"+ (char)39);
 
@@ -88,7 +90,7 @@ using project.Models;
                  foreach (DataRow dr in table.Rows)
                 {
                     String id = dr["st_id"].ToString();
-                    String name = dr["st_name"].ToString();
+                    String dname = dr["st_name"].ToString();
                     String dept = dr["st_dept"].ToString();
                     String rfid = dr["st_rfid"].ToString();
                     String spec = dr["st_specialization"].ToString();
@@ -104,7 +106,7 @@ using project.Models;
                     writer.WriteStartElement("Staff");
 
                     writer.WriteStartElement("Person");
-                    writer.WriteAttributeString("Name", name);
+                    writer.WriteAttributeString("Name", dname);
                     writer.WriteAttributeString("ID", id);
                     writer.WriteAttributeString("Department", dept);
                     writer.WriteAttributeString("rfid", rfid);
@@ -118,11 +120,11 @@ using project.Models;
 
                     XmlDocument xmlDocument = new XmlDocument();
                     xmlDocument.LoadXml(sb.ToString());
-                    //return Ok(xmlDocument);
+                    //return Ok(xmlDocument.ToString());
 
                     return new ContentResult{
                         ContentType = "application/xml",
-                        Content = xmlDocument,
+                        Content = xmlDocument.ToString(),
                         StatusCode = 200
                     };
                 }    

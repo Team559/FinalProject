@@ -8059,19 +8059,19 @@
     ]
   },
   "packageFolders": {
-    "/home/simkaur/.nuget/packages/": {}
+    "/home/as93/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/simkaur/FinalProject_C_Sharp/rfidProject/rfidProject.csproj",
+      "projectUniqueName": "/home/as93/final_project559/rfidProject/rfidProject.csproj",
       "projectName": "rfidProject",
-      "projectPath": "/home/simkaur/FinalProject_C_Sharp/rfidProject/rfidProject.csproj",
-      "packagesPath": "/home/simkaur/.nuget/packages/",
-      "outputPath": "/home/simkaur/FinalProject_C_Sharp/rfidProject/obj/",
+      "projectPath": "/home/as93/final_project559/rfidProject/rfidProject.csproj",
+      "packagesPath": "/home/as93/.nuget/packages/",
+      "outputPath": "/home/as93/final_project559/rfidProject/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/home/simkaur/.nuget/NuGet/NuGet.Config"
+        "/home/as93/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "netcoreapp3.1"
