@@ -47,9 +47,9 @@ using project.Models;
          public IActionResult deleteMedication(int id )
          {
              try {
-                     DataSet deletedRoom = executeSQL("SELECT * FROM medicine_info WHERE m_rfid = " + (char)39 + id + (char)39);
+                     DataSet deletedMed = executeSQL("SELECT * FROM medicine_info WHERE m_rfid = " + (char)39 + id + (char)39);
 
-                     int records = deletedRoom.Tables[0].Rows.Count;
+                     int records = deletedMed.Tables[0].Rows.Count;
                      if (records == 0) {
                          HttpContext.Response.StatusCode = 404;
                          return NotFound("No medication found with id  " + id);

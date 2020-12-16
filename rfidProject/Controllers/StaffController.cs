@@ -15,7 +15,7 @@ namespace project.Controllers {
 
  public class StaffController : ControllerBase{
 
-        // Connects to database and execute an SQL statement for retrieving the data for Countries
+        // Connects to database and execute an SQL statement for retrieving the data for staff
         [ApiExplorerSettings(IgnoreApi = true)]
         [NonAction]
         public DataSet executeSQL (string sqlStatement)

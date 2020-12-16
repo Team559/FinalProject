@@ -72,6 +72,75 @@ using project.Models;
              }
          }
 
+        [HttpGet]
+         [Route("surgeries/doctorXML/{name}")]
+         public IActionResult getSurgeryByDoctor(string name) {
+             try {
+                 DataSet med = executeSQL("SELECT * FROM surgery_info WHERE doctor_name LIKE " + (char)39 + "%"+ name +"%"+ (char)39);
+
+                int records = med.Tables[0].Rows.Count;
+                if (records == 0) {
+                    HttpContext.Response.StatusCode = 404;
+                    return NotFound("No doctor found with name   " + name);
+                }
+                //else read the row:
+                 DataTable table = med.Tables[0];
+                 foreach (DataRow dr in table.Rows)
+                {
+                    String id = dr["st_id"].ToString();
+                    String name = dr["st_name"].ToString();
+                    String dept = dr["st_dept"].ToString();
+                    String rfid = dr["st_rfid"].ToString();
+                    String spec = dr["st_specialization"].ToString();
+
+                    StringBuilder sb = new StringBuilder();
+                    XmlWriterSettings settings = new XmlWriterSettings();
+                    settings.Indent = true;
+                    settings.OmitXmlDeclaration = true;
+                    settings.NewLineOnAttributes = true;
+                    XmlWriter writer = XmlWriter.Create(sb, settings);
+
+                    writer.WriteStartDocument();
+                    writer.WriteStartElement("Staff");
+
+                    writer.WriteStartElement("Person");
+                    writer.WriteAttributeString("Name", name);
+                    writer.WriteAttributeString("ID", id);
+                    writer.WriteAttributeString("Department", dept);
+                    writer.WriteAttributeString("rfid", rfid);
+                    writer.WriteAttributeString("Specialization", spec);
+                    writer.WriteEndElement();
+
+                    writer.WriteEndElement();
+                    writer.WriteEndDocument();
+
+                    writer.Flush(); 
+
+                    XmlDocument xmlDocument = new XmlDocument();
+                    xmlDocument.LoadXml(sb.ToString());
+                    //return Ok(xmlDocument);
+
+                    return new ContentResult{
+                        ContentType = "application/xml",
+                        Content = xmlDocument,
+                        StatusCode = 200
+                    };
+                }    
+                 
+                 return Ok(med);
+
+             } catch (Exception e) {
+                 HttpContext.Response.StatusCode = 400;
+                
+                 return Problem(
+                     detail: e.StackTrace,
+                     title: e.Message);
+             }
+         }
+
+
+
+
          // Delete an existing record from the database by surgery id
          [HttpDelete]
          [Route("surgeries/{id}")]
@@ -102,16 +171,12 @@ using project.Models;
              }
          }
 
-         // Add record from the database by medication id
-         // use NULL for accessed/given/used when the med has not been used.
+         //Update 
          [HttpPut]
          [Route("surgeries/{id}")]
          public IActionResult upadteSurgery(string id )
          {
              try {
-                
-                string sqlQuery = "UPDATE surgery_info SET s_progress = 'Completed' WHERE s_id =  " + (char)39 + id + (char)39;
-                executeSQL(sqlQuery);
 
                 DataSet updatedInstruments = executeSQL("SELECT * FROM surgery_info WHERE s_id =  " + (char)39 + id + (char)39);
 
@@ -119,12 +184,14 @@ using project.Models;
                 if (records == 0) {
                     HttpContext.Response.StatusCode = 404;
                     return NotFound("No Surgery found with id   " + id);
-                }
-
-                HttpContext.Response.StatusCode = 200;
-                var status = "Surgery with id " + id + " Updated successfully !!";
+                } else {
+                    string sqlQuery = "UPDATE surgery_info SET s_progress = 'Completed' WHERE s_id =  " + (char)39 + id + (char)39;
+                    executeSQL(sqlQuery);
+                    HttpContext.Response.StatusCode = 200;
+                    var status = "Surgery with id " + id + " Updated successfully !!";
                 
-                return Ok(status);
+                    return Ok(status);
+                }
 
              } catch (Exception e) {
                  HttpContext.Response.StatusCode = 400;
