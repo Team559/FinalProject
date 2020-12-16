@@ -20,9 +20,10 @@ DATABASE:
 3. http://localhost:3306/phpmyadmin/
 4. once database is up and running, import the data from attached medical_surgeries.sql file.
 
-WROKING OF application:
+Validate application:
 
 1. from POSTMAN: 
-   http://hostname:4881/surgeries :: this will return the list of the surgies in JSON Format.
+    
+   GET :: http://hostname:4881/surgeries,:: this will return the list of the surgies in JSON Format.
    
-   http://hostname:4881/Service.asmx :: This is soap services, which will return the list of staff members in XML FORMAT.
+   GET :: http://hostname:4881/Service.asmx :: This is soap services, which will return the list of staff members in XML FORMAT.
